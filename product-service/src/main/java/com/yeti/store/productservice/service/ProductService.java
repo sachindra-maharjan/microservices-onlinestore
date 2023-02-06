@@ -1,10 +1,10 @@
 package com.yeti.store.productservice.service;
 
-import java.util.Optional;
-
+import java.util.List;
 import org.springframework.stereotype.Service;
 
-import com.yeti.store.productservice.dto.ProductDto;
+import com.yeti.store.productservice.dto.ProductRequest;
+import com.yeti.store.productservice.dto.ProductResponse;
 import com.yeti.store.productservice.model.Product;
 import com.yeti.store.productservice.repository.ProductRepository;
 
@@ -18,7 +18,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     
-    public void create(ProductDto productDto) {
+    public void create(ProductRequest productDto) {
         Product product = Product.builder()
             .name(productDto.getName())
             .sku(productDto.getSku())
@@ -26,6 +26,21 @@ public class ProductService {
             .build();     
         Product newProduct = productRepository.insert(product); 
         log.info("New product {} added.", newProduct.getId());
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                    .map(this::mapProductToProductResponse)
+                    .toList();
+    }
+
+    private ProductResponse mapProductToProductResponse(Product product) {
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .sku(product.getSku())
+                .price(product.getPrice())
+                .build();
     }
 
 }

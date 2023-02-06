@@ -13,7 +13,7 @@ import lombok.Data;
 @Builder
 public class Product {
     @Id
-    private Long id;
+    private String id;
     private String name;
     private String sku;
     private BigDecimal price;
