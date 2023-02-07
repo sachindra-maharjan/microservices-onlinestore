@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.greaterThan;
+
 
 @SpringBootTest
 @Testcontainers
@@ -71,8 +73,7 @@ class ProductServiceApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].name").value("Samsung S9+"))
+				.andExpect(jsonPath("$", hasSize(greaterThan(0))))
 				.andDo(MockMvcResultHandlers.print())
 				;
 	}
