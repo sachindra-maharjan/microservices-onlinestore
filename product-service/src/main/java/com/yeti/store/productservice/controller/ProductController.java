@@ -39,4 +39,10 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/health")
+    @ResponseStatus(HttpStatus.OK)
+    public String health() {
+        return "OK";
+    }
+
 }

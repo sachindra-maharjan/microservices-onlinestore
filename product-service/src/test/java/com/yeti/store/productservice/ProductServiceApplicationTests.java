@@ -59,7 +59,7 @@ class ProductServiceApplicationTests {
 	void shouldCreateNewProduct() throws Exception {
 		ProductRequest productRequest = getProductRequest();
 		String productRequestString = objectMapper.writeValueAsString(productRequest);
-		mockMvc.perform(MockMvcRequestBuilders.post("/products")
+		mockMvc.perform(MockMvcRequestBuilders.post("/product")
 												.contentType(MediaType.APPLICATION_JSON)
 												.content(productRequestString))
 												.andExpect(status().isCreated());
@@ -69,7 +69,7 @@ class ProductServiceApplicationTests {
 	@Test
 	void shouldGetAllProducts() throws Exception {
 		productService.create(getProductRequest());
-		mockMvc.perform(MockMvcRequestBuilders.get("/products")
+		mockMvc.perform(MockMvcRequestBuilders.get("/product")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))

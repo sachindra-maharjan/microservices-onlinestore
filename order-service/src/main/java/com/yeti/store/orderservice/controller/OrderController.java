@@ -1,6 +1,7 @@
 package com.yeti.store.orderservice.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,5 +25,11 @@ public class OrderController {
   public String placeOrder(OrderDto orderDto) throws ServiceException{
     return orderService.createOrder(orderDto);
   }
+
+  @GetMapping("/health")
+    @ResponseStatus(HttpStatus.OK)
+    public String health() {
+        return "OK";
+    }
   
 }

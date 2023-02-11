@@ -27,4 +27,10 @@ public class InventoryController {
         return inventoryService.isInStock(skus);
     }
 
+    @GetMapping("/health")
+    @ResponseStatus(HttpStatus.OK)
+    public String health() {
+        return "OK";
+    }
+
 }
