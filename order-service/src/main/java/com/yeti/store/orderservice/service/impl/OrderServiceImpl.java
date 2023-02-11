@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
             .toList();
         
         InventoryDto[] inventoryDtos = webClientBuilder.build().get()
-            .uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skus). build())
+            .uri("http://INVENTORY-SERVICE/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skus). build())
             .retrieve()
             .bodyToMono(InventoryDto[].class)
             .block();    

@@ -2,6 +2,10 @@ server:
   port: 8002
 
 spring:
+  application:
+    name: ORDER-SERVICE
+  config:
+    import: "optional:configserver:http://config-server:9001"
   datasource:
     url: jdbc:mysql://localhost:3306/order-service
     driver-class-name: com.mysql.cj.jdbc.Driver
