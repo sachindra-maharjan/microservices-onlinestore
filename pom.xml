@@ -21,11 +21,12 @@
 	</properties>
   
 	<modules>
+    <module>discovery-server</module>
+    <module>config-server</module>
+    <module>api-gateway</module>
     <module>product-service</module>
     <module>order-service</module>
     <module>inventory-service</module>
-    <module>discovery-server</module>
-    <module>config-server</module>
   </modules>
 
    <dependencyManagement>
@@ -61,6 +62,19 @@
 					</excludes>
 				</configuration>
 			</plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <from>
+            <image>eclipse-temurin:19.0.2_7-jre-alpine</image>
+          </from>
+          <to>
+            <image>registry.hub.docker.com/sachindramaharjan/yeti-${project.artifactId}</image>
+          </to>
+        </configuration>
+      </plugin>
 		</plugins>
 	</build>
 

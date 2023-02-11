@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  discovery-server:
+    container_name: discovery-server
+    image: sachindramaharjan/yeti-discovery-server:latest
+    ports:
+      - 8761:8761
+    restart: always
+    networks:
+      - cloud-network
+
+
+networks:
+  cloud-network:
+    driver: bridge
