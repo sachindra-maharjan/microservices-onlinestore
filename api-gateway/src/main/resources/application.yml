@@ -1,0 +1,39 @@
+server:
+  port: 9092
+spring:
+  application:
+    name: API-GATEWAY
+  config:
+    import: "optional:configserver:http://config-server:9001"
+  cloud:
+    gateway:
+      routes:
+        - id: PRODUCT-SERVICE
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/product/**
+        - id: ORDER-SERVICE
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/**
+        - id: INVENTORY-SERVICE
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/inventory/**
+        - id: DISCOVERY-SERVER 
+          uri: lb://DISCOVERY-SERVER
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+        - id: DISCOVERY-SERVER-STATIC
+          uri: lb://DISCOVERY-SERVER
+          predicates:
+            - Path=/eureka/**
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway: TRACE
