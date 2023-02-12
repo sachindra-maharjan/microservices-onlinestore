@@ -1,16 +1,222 @@
 version: '3.9'
 
 services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:6.0.4-focal
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    volumes:
+      - ./mongo-data:/data/db
+    networks:
+      - secure-network
+    restart: always
+    
+  # postgres-order:
+  #   container_name: postgres-order
+  #   image: postgres:alpine3.17
+  #   environment:
+  #     - POSTGRES_DB=order-service
+  #     - POSTGRES_USER=order
+  #     - POSTGRES_PASSWORD=password
+  #     - PGDATA=/data/postgres
+  #   ports:
+  #     - 5431:5431
+  #   expose:
+  #     - 5431
+  #   volumes:
+  #     - ./data/postgres-order:/data/postgres
+  #   networks:
+  #     - secure-network
+  #   restart: always
+
+  # postgres-inventory:
+  #   container_name: postgres-inventory
+  #   image: postgres:alpine3.17
+  #   environment:
+  #     - POSTGRES_DB=inventory-service
+  #     - POSTGRES_USER=inventory
+  #     - POSTGRES_PASSWORD=password
+  #     - PGDATA=/data/postgres
+  #   ports:
+  #     - 5432:5432
+  #   expose:
+  #     - 5432
+  #   volumes:
+  #     - ./data/postgres-inventory:/data/postgres
+  #   networks:
+  #     - secure-network
+  #   restart: always
+  
+  # keycloak-mysql:
+  #   container_name: keyclock-mysql
+  #   image: mysql:5.7.41-debian
+  #   volumes:
+  #     - ./data/mysql-keyclock:/var/lib/mysql
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root 
+  #     - MYSQL_DATABASE=keyclock
+  #     - MYSQL_USER=keyclock
+  #     - MYSQL_PASSWORD=password
+  #   restart: always
+  #   networks:
+  #     - secure-network
+  
+  # keycloak:
+  #   container_name: keyclock
+  #   image: quay.io/keycloak/keycloak:18.0.0
+  #   command: ["start-dev", "--import-realm"]
+  #   environment:
+  #     - DB_VENDOR=MYSQL 
+  #     - DB_ADDR=mysql
+  #     - DB_DATABASE=keyclock
+  #     - DB_USER=keyclock
+  #     - DB_PASSWORD=password
+  #     - KEYCLOCK_ADMIN=admin 
+  #     - KEYCLOCK_ADMIN_PASSWORD=admin 
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./data/realms/:/opt/keyclock/data/import
+  #   depends_on:
+  #     - keycloak-mysql
+  #   networks:
+  #     - secure-network
+
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:7.0.1
+  #   container_name: zookeeper
+  #   ports:
+  #     - 2181:2181
+  #   environment:
+  #     - ZOOKEEPER_CLIENT_PORT=2181
+  #     - ZOOKEEPER_TICK_TIME=2000
+  #   networks:
+  #     - api-network
+
+  # kafka-broker:
+  #   image: confluentinc/cp-kafka:7.0.1
+  #   container_name: kafka-broker
+  #   ports:
+  #     - 9092:9092
+  #   depends_on:
+  #     - zookeeper
+  #   environment:
+  #     - KAFKA_kafka-broker_ID=1
+  #     - KAFKA_ZOOKEEPER_CONNECT='zookeeper:2181'
+  #     - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+  #     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka-broker:29092
+  #     - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+  #     - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+  #     - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+  #   networks:
+  #     - api-network
+  
+  # zipkin:
+  #   image: openzipkin/zipkin
+  #   container_name: zipkin
+  #   ports:
+  #     - 9411:9411
+  #   networks:
+  #     - ops-network
+
   discovery-server:
-    container_name: discovery-server
+    container_name: yeti-discovery-server
     image: sachindramaharjan/yeti-discovery-server:latest
+    pull_policy: always
     ports:
       - 8761:8761
-    restart: always
+    networks:
+      - cloud-network
+    # depends_on:
+    #   - zipkin
+  
+  config-server:
+    container_name: yet-config-server
+    image: sachindramaharjan/yeti-config-server:latest
+    pull_policy: always
+    ports:
+      - 9091:9091
+    depends_on:
+      - discovery-server
     networks:
       - cloud-network
 
+  api-gateway:
+    container_name: yeti-api-gateway
+    image: sachindramaharjan/yeti-api-gateway:latest
+    ports:
+      - 8081:8080
+    pull_policy: always
+    networks:
+      - cloud-network
+      - api-network
+    depends_on:
+      # - zipkin
+      - discovery-server
+      # - keycloak
+  
+  product-service:
+    container_name: yeti-product-service
+    image: sachindramaharjan/yeti-product-service
+    pull_policy: always
+    ports:
+      - 8001:8001
+    networks:
+      - api-network
+      - secure-network
+      - cloud-network
+    depends_on:
+      - mongodb
+      # - zipkin
+      - discovery-server
+      - config-server
+      - api-gateway
 
+  # order-service:
+  #   container_name: yeti-order-service
+  #   image: sachindramaharjan/yeti-order-service
+  #   pull_policy: always
+  #   ports:
+  #     - 8002:8002
+  #   environment:
+  #     - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-order:5431/order-service
+  #   networks:
+  #     - api-network
+  #     - secure-network
+  #     - cloud-network
+  #   depends_on:
+  #     - postgres-order
+  #     # - kafka-broker
+  #     # - zipkin
+  #     - discovery-server
+  #     - api-gateway
+  
+  # inventory-service:
+  #   container_name: yeti-inventory-service
+  #   image: sachindramaharjan/yeti-inventory-service
+  #   pull_policy: always
+  #   ports:
+  #     - 8003:8003
+  #   environment:
+  #     - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-inventory:5432/order-inventory
+  #   networks:
+  #     - api-network
+  #     - secure-network
+  #     - cloud-network
+  #   depends_on:
+  #     - postgres-inventory
+  #     - discovery-server
+  #     - api-gateway
+  
 networks:
   cloud-network:
+    driver: bridge
+  api-network:
+    driver: bridge
+  secure-network:
+    driver: bridge
+  ops-network:
     driver: bridge

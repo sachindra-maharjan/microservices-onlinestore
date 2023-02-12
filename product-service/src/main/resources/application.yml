@@ -6,3 +6,9 @@ spring:
     name: PRODUCT-SERVICE
   config:
     import: "optional:configserver:http://config-server:9001"
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: product-service
+      
