@@ -4,7 +4,7 @@ spring:
   application:
     name: API-GATEWAY
   config:
-    import: "optional:configserver:http://config-server:9001"
+    import: "optional:configserver:http://yeti-config-server:9091"
   cloud:
     gateway:
       routes:
@@ -35,5 +35,5 @@ spring:
 logging:
   level:
     root: INFO
-    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
-    org.springframework.cloud.gateway: TRACE
+    # org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    # org.springframework.cloud.gateway: TRACE

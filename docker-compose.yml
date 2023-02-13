@@ -9,7 +9,7 @@ services:
     expose:
       - 27017
     volumes:
-      - ./mongo-data:/data/db
+      - ./data/mongodb:/data/db
     networks:
       - secure-network
     restart: always

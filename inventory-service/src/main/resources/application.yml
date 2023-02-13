@@ -5,7 +5,7 @@ spring:
   application:
     name: INVENTORY-SERVICE
   config:
-    import: "optional:configserver:http://config-server:9001"
+    import: "optional:configserver:http://yeti-config-server:9091"
   datasource:
     url: jdbc:postgresql://postgres:5432/inventory-service
     driver-class-name: org.postgresql.Driver
