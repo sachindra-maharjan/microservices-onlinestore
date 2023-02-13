@@ -4,7 +4,7 @@ spring:
   application:
     name: API-GATEWAY
   config:
-    import: "optional:configserver:http://yeti-config-server:9091"
+    import: "configserver:http://cloud-config-server:9091"
   cloud:
     gateway:
       routes:

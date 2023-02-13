@@ -148,7 +148,7 @@ services:
     container_name: yeti-api-gateway
     image: sachindramaharjan/yeti-api-gateway:latest
     ports:
-      - 8081:8080
+      - 8080:8080
     pull_policy: always
     networks:
       - cloud-network
@@ -156,6 +156,7 @@ services:
     depends_on:
       # - zipkin
       - discovery-server
+      - config-server
       # - keycloak
   
   product-service:
