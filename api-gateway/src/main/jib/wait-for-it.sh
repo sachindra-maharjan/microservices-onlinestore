@@ -3,6 +3,7 @@
 # Define default values for the arguments
 URL="http://localhost"
 PORT=80
+ENDPOINT=/
 TIMEOUT=15
 STRICT=false
 
@@ -22,6 +23,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -e|--endpoint)
+    ENDPOINT="$2"
+    shift # past argument
+    shift # past value
+    ;;
     -t|--timeout)
     TIMEOUT="$2"
     shift # past argument
@@ -37,12 +43,16 @@ case $key in
 esac
 done
 
-echo "Waiting for $URL:$PORT..."
+if[[ $ENDPOINT != /* ]]; then
+    ENDPOINT="/$ENDPOINT"
+fi
+
+echo "Waiting for $URL:$PORT:$ENDPOINT..."
 
 # Try to curl the service until it becomes available or a timeout is reached
 for i in $(seq 1 $TIMEOUT)
 do
-    if curl -s "$URL:$PORT" >/dev/null; then
+    if curl -s "$URL:$PORT$ENDPOINT" >/dev/null; then
         break
     fi
     echo -n "."
@@ -56,5 +66,5 @@ if [[ $i -eq $TIMEOUT ]]; then
         exit 1
     fi
 else
-    echo "$URL:$PORT is available!"
+    echo "$URL:$PORT$ENDPOINT is available!"
 fi

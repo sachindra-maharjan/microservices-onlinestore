@@ -2,7 +2,7 @@
 
 echo "Pooling the config server"
 
-sh ./app/wait-for-it.sh -u http://jeti-config-server -p 9091 -t 300 -s
+sh ./app/wait-for-it.sh -u http://config-server -p 9091 -e /actuator -t 300 -s
 
 retval=$?
 echo $retval
