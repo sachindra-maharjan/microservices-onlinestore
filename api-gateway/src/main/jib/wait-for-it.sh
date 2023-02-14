@@ -43,7 +43,7 @@ case $key in
 esac
 done
 
-if[[ $ENDPOINT != /* ]]; then
+if [[ $ENDPOINT != /* ]]; then
     ENDPOINT="/$ENDPOINT"
 fi
 
