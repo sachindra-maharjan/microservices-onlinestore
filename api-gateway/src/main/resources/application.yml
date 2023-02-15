@@ -30,6 +30,7 @@ spring:
           uri: lb://DISCOVERY-SERVER
           predicates:
             - Path=/eureka/**
+            - Path=/
 
 
 logging:
