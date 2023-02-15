@@ -4,7 +4,7 @@
 URL="http://localhost"
 PORT=80
 ENDPOINT=/
-TIMEOUT=15
+TIMEOUT=30
 STRICT=false
 
 # Parse the command line arguments
@@ -47,7 +47,7 @@ if [[ $ENDPOINT != /* ]]; then
     ENDPOINT="/$ENDPOINT"
 fi
 
-echo "Waiting for $URL:$PORT:$ENDPOINT..."
+echo "Waiting for $URL:$PORT$ENDPOINT..."
 
 # Try to curl the service until it becomes available or a timeout is reached
 for i in $(seq 1 $TIMEOUT)
