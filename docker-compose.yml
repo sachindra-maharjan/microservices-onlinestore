@@ -170,11 +170,10 @@ services:
       - secure-network
       - cloud-network
     depends_on:
-      - mongodb
-      # - zipkin
       - discovery-server
       - config-server
-      - api-gateway
+      - mongodb
+      # - zipkin
 
   # order-service:
   #   container_name: yeti-order-service

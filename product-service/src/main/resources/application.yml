@@ -5,7 +5,7 @@ spring:
   application:
     name: PRODUCT-SERVICE
   config:
-    import: "optional:configserver:http://yeti-config-server:9091"
+    import: "configserver:http://config-server:9091"
   data:
     mongodb:
       host: mongodb

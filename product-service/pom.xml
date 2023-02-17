@@ -85,38 +85,38 @@
           <to>
             <image>registry.hub.docker.com/sachindramaharjan/yeti-${project.artifactId}</image>
           </to>
-			<container>
-				<environment>
-					<JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
-					<CONFIG_SERVER_URI>http://config-server</CONFIG_SERVER_URI>
-					<CONFIG_SERVER_PORT>9091</CONFIG_SERVER_PORT>
-					<CONFIG_SERVER_TIMEOUT>300</CONFIG_SERVER_TIMEOUT>
-					<ENTRYPOINT>com.yeti.store.productservice.ProductServiceApplication</ENTRYPOINT>
-				</environment>
-				<entrypoint>
-					<shell>/bin/sh</shell>
-					<option>-c</option>
-					<arg>/app/start.sh</arg>
-				</entrypoint>
-			</container>
-			<extraDirectories>
-				<paths>
-					<path>
-						<from>src/main/jib</from>
-						<into>/app</into>
-					</path>
-				</paths>
-				<permissions>
-					<permission>
-						<file>/app/wait-for-it.sh</file>
-						<mode>755</mode>
-					</permission>
-					<permission>
-						<file>/app/start.sh</file>
-						<mode>755</mode>
-					</permission>
-				</permissions>
-        </extraDirectories>
+					<container>
+						<environment>
+							<JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
+							<CONFIG_SERVER_URI>http://config-server</CONFIG_SERVER_URI>
+							<CONFIG_SERVER_PORT>9091</CONFIG_SERVER_PORT>
+							<CONFIG_SERVER_TIMEOUT>300</CONFIG_SERVER_TIMEOUT>
+							<ENTRYPOINT>com.yeti.store.productservice.ProductServiceApplication</ENTRYPOINT>
+						</environment>
+						<entrypoint>
+							<shell>/bin/sh</shell>
+							<option>-c</option>
+							<arg>/app/start.sh</arg>
+						</entrypoint>
+					</container>
+					<extraDirectories>
+						<paths>
+							<path>
+								<from>src/main/jib</from>
+								<into>/app</into>
+							</path>
+						</paths>
+						<permissions>
+							<permission>
+								<file>/app/wait-for-it.sh</file>
+								<mode>755</mode>
+							</permission>
+							<permission>
+								<file>/app/start.sh</file>
+								<mode>755</mode>
+							</permission>
+						</permissions>
+						</extraDirectories>
         </configuration>
       </plugin>
 		</plugins>
