@@ -102,7 +102,7 @@
 					<extraDirectories>
 						<paths>
 							<path>
-								<from>src/main/jib</from>
+								<from>../scripts/jib</from>
 								<into>/app</into>
 							</path>
 						</paths>

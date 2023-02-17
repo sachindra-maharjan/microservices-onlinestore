@@ -15,7 +15,6 @@ sh ./app/wait-for-it.sh -u $CONFIG_SERVER_URI -p $CONFIG_SERVER_PORT -e /actuato
 retval=$?
 echo $retval
 
-
 if [ $retval -eq 0 ]; then
   echo "Starting application"
   java $JAVA_OPTS -cp @/app/jib-classpath-file $ENTRYPOINT
