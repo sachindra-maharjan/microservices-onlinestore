@@ -50,40 +50,42 @@ services:
   #     - secure-network
   #   restart: always
   
-  # keycloak-mysql:
-  #   container_name: keyclock-mysql
-  #   image: mysql:5.7.41-debian
-  #   volumes:
-  #     - ./data/mysql-keyclock:/var/lib/mysql
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=root 
-  #     - MYSQL_DATABASE=keyclock
-  #     - MYSQL_USER=keyclock
-  #     - MYSQL_PASSWORD=password
-  #   restart: always
-  #   networks:
-  #     - secure-network
+  keycloak-mysql:
+    container_name: keyclock-mysql
+    image: mysql:5.7.41-debian
+    volumes:
+      - ./data/mysql-keyclock:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root 
+      - MYSQL_DATABASE=keyclock
+      - MYSQL_USER=keyclock
+      - MYSQL_PASSWORD=password
+    restart: always
+    networks:
+      - secure-network
   
-  # keycloak:
-  #   container_name: keyclock
-  #   image: quay.io/keycloak/keycloak:18.0.0
-  #   command: ["start-dev", "--import-realm"]
-  #   environment:
-  #     - DB_VENDOR=MYSQL 
-  #     - DB_ADDR=mysql
-  #     - DB_DATABASE=keyclock
-  #     - DB_USER=keyclock
-  #     - DB_PASSWORD=password
-  #     - KEYCLOCK_ADMIN=admin 
-  #     - KEYCLOCK_ADMIN_PASSWORD=admin 
-  #   ports:
-  #     - 8080:8080
-  #   volumes:
-  #     - ./data/realms/:/opt/keyclock/data/import
-  #   depends_on:
-  #     - keycloak-mysql
-  #   networks:
-  #     - secure-network
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:20.0.3
+    command: ["start-dev", "--import-realm"]
+    environment:
+      - DB_VENDOR=MYSQL 
+      - DB_ADDR=mysql
+      - DB_DATABASE=keyclock
+      - DB_USER=keyclock
+      - DB_PASSWORD=password
+      - KEYCLOAK_ADMIN=admin 
+      - KEYCLOAK_ADMIN_PASSWORD=admin 
+    ports:
+      - 8181:8080
+    volumes:
+      - ./realms:/opt/keycloak/data/import
+    depends_on:
+      - keycloak-mysql
+    networks:
+      - secure-network
+      - api-network
+      - cloud-network
 
   # zookeeper:
   #   image: confluentinc/cp-zookeeper:7.0.1
@@ -157,7 +159,7 @@ services:
       # - zipkin
       - discovery-server
       - config-server
-      # - keycloak
+      - keycloak
   
   product-service:
     container_name: yeti-product-service
