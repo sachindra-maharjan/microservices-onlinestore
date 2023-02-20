@@ -11,7 +11,7 @@ services:
     volumes:
       - ./data/mongodb:/data/db
     networks:
-      - secure-network
+      - cloud-network
     restart: always
     
   # postgres-order:
@@ -62,7 +62,7 @@ services:
       - MYSQL_PASSWORD=password
     restart: always
     networks:
-      - secure-network
+      - cloud-network
   
   keycloak:
     container_name: keycloak
@@ -77,14 +77,12 @@ services:
       - KEYCLOAK_ADMIN=admin 
       - KEYCLOAK_ADMIN_PASSWORD=admin 
     ports:
-      - 8181:8080
+      - 8080:8080
     volumes:
       - ./realms:/opt/keycloak/data/import
     depends_on:
       - keycloak-mysql
     networks:
-      - secure-network
-      - api-network
       - cloud-network
 
   # zookeeper:
@@ -150,11 +148,14 @@ services:
     container_name: yeti-api-gateway
     image: sachindramaharjan/yeti-api-gateway:latest
     ports:
-      - 8080:8080
+      - 8181:8080
+    expose:
+      - 8181
+    environment:
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
     pull_policy: always
     networks:
       - cloud-network
-      - api-network
     depends_on:
       # - zipkin
       - discovery-server
@@ -168,8 +169,6 @@ services:
     ports:
       - 8001:8001
     networks:
-      - api-network
-      - secure-network
       - cloud-network
     depends_on:
       - discovery-server

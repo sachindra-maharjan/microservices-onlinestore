@@ -5,6 +5,11 @@ spring:
     name: API-GATEWAY
   config:
     import: "configserver:http://config-server:9091"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/spring-boot-microservices-realm
   cloud:
     gateway:
       routes:
@@ -30,14 +35,7 @@ spring:
           uri: lb://DISCOVERY-SERVER
           predicates:
             - Path=/eureka/**
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://keycloak:8181/realms/spring-boot-microservices-realm
         
-
 logging:
   level:
     root: INFO
