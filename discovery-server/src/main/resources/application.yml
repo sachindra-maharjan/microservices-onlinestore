@@ -5,9 +5,11 @@ spring:
   application:
     name: DISCOVERY-SERVER
 
-euraka:
+eureka:
   instance:
     hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false
+  username: ${EUREKA_USERNAME:euraka}
+  password: ${EUREKA_PASSWORD:password}

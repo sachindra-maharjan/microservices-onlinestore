@@ -16,6 +16,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://yeti-discovery-server:8761/eureka
+      defaultZone: http://eureka:password@yeti-discovery-server:8761/eureka
   instance:
     hostname: yeti-discovery-server
