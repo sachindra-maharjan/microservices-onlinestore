@@ -29,7 +29,7 @@ public class OrderController {
   @GetMapping("/health")
     @ResponseStatus(HttpStatus.OK)
     public String health() {
-        return "OK";
+        return orderService.resilience4JTestOnly();
     }
   
 }

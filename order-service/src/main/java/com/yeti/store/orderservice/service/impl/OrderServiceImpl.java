@@ -67,4 +67,14 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
+    @Override
+    public String resilience4JTestOnly() {  
+        String result = webClientBuilder.build().get()
+            .uri("http://INVENTORY-SERVICE/api/inventory/health")
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
+        return result;
+    }
+
 }

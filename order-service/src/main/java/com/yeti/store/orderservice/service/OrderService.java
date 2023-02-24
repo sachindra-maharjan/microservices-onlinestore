@@ -7,4 +7,6 @@ public interface OrderService {
 
     String createOrder(OrderDto orderDto) throws ServiceException;
 
+    String resilience4JTestOnly();
+
 }
