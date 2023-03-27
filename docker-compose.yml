@@ -14,41 +14,41 @@ services:
       - cloud-network
     restart: always
     
-  # postgres-order:
-  #   container_name: postgres-order
-  #   image: postgres:alpine3.17
-  #   environment:
-  #     - POSTGRES_DB=order-service
-  #     - POSTGRES_USER=order
-  #     - POSTGRES_PASSWORD=password
-  #     - PGDATA=/data/postgres
-  #   ports:
-  #     - 5431:5431
-  #   expose:
-  #     - 5431
-  #   volumes:
-  #     - ./data/postgres-order:/data/postgres
-  #   networks:
-  #     - secure-network
-  #   restart: always
+  postgres-order:
+    container_name: postgres-order
+    image: postgres:alpine3.17
+    environment:
+      - POSTGRES_DB=order-service
+      - POSTGRES_USER=order
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/data/postgres
+    ports:
+      - 5431:5431
+    expose:
+      - 5431
+    volumes:
+      - ./data/postgres-order:/data/postgres
+    networks:
+      - cloud-network
+    restart: always
 
-  # postgres-inventory:
-  #   container_name: postgres-inventory
-  #   image: postgres:alpine3.17
-  #   environment:
-  #     - POSTGRES_DB=inventory-service
-  #     - POSTGRES_USER=inventory
-  #     - POSTGRES_PASSWORD=password
-  #     - PGDATA=/data/postgres
-  #   ports:
-  #     - 5432:5432
-  #   expose:
-  #     - 5432
-  #   volumes:
-  #     - ./data/postgres-inventory:/data/postgres
-  #   networks:
-  #     - secure-network
-  #   restart: always
+  postgres-inventory:
+    container_name: postgres-inventory
+    image: postgres:alpine3.17
+    environment:
+      - POSTGRES_DB=inventory-service
+      - POSTGRES_USER=inventory
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/data/postgres
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    volumes:
+      - ./data/postgres-inventory:/data/postgres
+    networks:
+      - cloud-network
+    restart: always
   
   keycloak-mysql:
     container_name: keyclock-mysql
@@ -114,13 +114,13 @@ services:
   #   networks:
   #     - api-network
   
-  # zipkin:
-  #   image: openzipkin/zipkin
-  #   container_name: zipkin
-  #   ports:
-  #     - 9411:9411
-  #   networks:
-  #     - ops-network
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - cloud-network
 
   discovery-server:
     container_name: yeti-discovery-server
@@ -130,8 +130,8 @@ services:
       - 8761:8761
     networks:
       - cloud-network
-    # depends_on:
-    #   - zipkin
+    depends_on:
+      - zipkin
   
   config-server:
     container_name: yet-config-server
@@ -157,7 +157,7 @@ services:
     networks:
       - cloud-network
     depends_on:
-      # - zipkin
+      - zipkin
       - discovery-server
       - config-server
       - keycloak
@@ -174,50 +174,41 @@ services:
       - discovery-server
       - config-server
       - mongodb
-      # - zipkin
+      - zipkin
 
-  # order-service:
-  #   container_name: yeti-order-service
-  #   image: sachindramaharjan/yeti-order-service
-  #   pull_policy: always
-  #   ports:
-  #     - 8002:8002
-  #   environment:
-  #     - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-order:5431/order-service
-  #   networks:
-  #     - api-network
-  #     - secure-network
-  #     - cloud-network
-  #   depends_on:
-  #     - postgres-order
-  #     # - kafka-broker
-  #     # - zipkin
-  #     - discovery-server
-  #     - api-gateway
+  order-service:
+    container_name: yeti-order-service
+    image: sachindramaharjan/yeti-order-service
+    pull_policy: always
+    ports:
+      - 8002:8002
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-order:5431/order-service
+    networks:
+      - cloud-network
+    depends_on:
+      - postgres-order
+      # - kafka-broker
+      - zipkin
+      - discovery-server
+      - api-gateway
   
-  # inventory-service:
-  #   container_name: yeti-inventory-service
-  #   image: sachindramaharjan/yeti-inventory-service
-  #   pull_policy: always
-  #   ports:
-  #     - 8003:8003
-  #   environment:
-  #     - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-inventory:5432/order-inventory
-  #   networks:
-  #     - api-network
-  #     - secure-network
-  #     - cloud-network
-  #   depends_on:
-  #     - postgres-inventory
-  #     - discovery-server
-  #     - api-gateway
+  inventory-service:
+    container_name: yeti-inventory-service
+    image: sachindramaharjan/yeti-inventory-service
+    pull_policy: always
+    ports:
+      - 8003:8003
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgressql://postgres-inventory:5432/order-inventory
+    networks:
+      - cloud-network
+    depends_on:
+      - postgres-inventory
+      - discovery-server
+      - api-gateway
+      - zipkin
   
 networks:
   cloud-network:
-    driver: bridge
-  api-network:
-    driver: bridge
-  secure-network:
-    driver: bridge
-  ops-network:
     driver: bridge

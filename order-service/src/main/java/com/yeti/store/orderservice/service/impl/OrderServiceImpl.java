@@ -16,12 +16,12 @@ import com.yeti.store.orderservice.model.OrderLineItem;
 import com.yeti.store.orderservice.repository.OrderRepository;
 import com.yeti.store.orderservice.service.OrderService;
 
-import jakarta.transaction.Transactional;
+// import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+// @Transactional
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
             .toList();
         
         InventoryDto[] inventoryDtos = webClientBuilder.build().get()
-            .uri("http://INVENTORY-SERVICE/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skus). build())
+            .uri("http://inventory-service/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skus). build())
             .retrieve()
             .bodyToMono(InventoryDto[].class)
             .block();    
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String resilience4JTestOnly() {  
         String result = webClientBuilder.build().get()
-            .uri("http://INVENTORY-SERVICE/api/inventory/health")
+            .uri("http://inventory-service/inventory/health")
             .retrieve()
             .bodyToMono(String.class)
             .block();

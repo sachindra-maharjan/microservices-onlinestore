@@ -11,6 +11,7 @@ import com.yeti.store.orderservice.dto.OrderDto;
 import com.yeti.store.orderservice.exception.ServiceException;
 import com.yeti.store.orderservice.service.OrderService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,9 +28,14 @@ public class OrderController {
   }
 
   @GetMapping("/health")
-    @ResponseStatus(HttpStatus.OK)
-    public String health() {
-        return orderService.resilience4JTestOnly();
-    }
+  @ResponseStatus(HttpStatus.OK)
+  @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
+  public String health() {
+      return orderService.resilience4JTestOnly();
+  }
+
+  public String fallbackMethod(RuntimeException exception) {
+    return "Oops! Something went wrong. Please try again later.";
+  }
   
 }

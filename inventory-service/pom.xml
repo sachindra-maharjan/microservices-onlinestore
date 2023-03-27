@@ -79,7 +79,7 @@
 						<CONFIG_SERVER_URI>http://config-server</CONFIG_SERVER_URI>
 						<CONFIG_SERVER_PORT>9091</CONFIG_SERVER_PORT>
 						<CONFIG_SERVER_TIMEOUT>300</CONFIG_SERVER_TIMEOUT>
-						<ENTRYPOINT>ccom.yeti.store.inventoryservice.InventoryServiceApplication</ENTRYPOINT>
+						<ENTRYPOINT>com.yeti.store.inventoryservice.InventoryServiceApplication</ENTRYPOINT>
 					</environment>
 					<entrypoint>
 						<shell>/bin/sh</shell>
