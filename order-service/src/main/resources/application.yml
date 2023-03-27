@@ -44,3 +44,15 @@ resilience4j:
         wait-duration-in-open-state: 5s
         permitted-number-of-calls-in-half-open-state: 3
         automatic-transition-from-open-to-half-open-enabled: true
+  #Resilience4J Timeout Properties
+  timelimiter:
+    instances:
+      inventory:
+        timeout-duration: 3s
+  #Resilience4J Retry Properties
+  retry:
+    instances:
+      inventory:
+        wait-duration: 5s
+        max-attempts: 3
+

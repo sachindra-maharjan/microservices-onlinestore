@@ -3,6 +3,7 @@ package com.yeti.store.orderservice.service.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -68,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String resilience4JTestOnly() {  
+    public String  resilience4JTestOnly() {  
         String result = webClientBuilder.build().get()
             .uri("http://inventory-service/inventory/health")
             .retrieve()
