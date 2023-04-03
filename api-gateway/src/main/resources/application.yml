@@ -35,6 +35,11 @@ spring:
           uri: lb://DISCOVERY-SERVER
           predicates:
             - Path=/eureka/**
+  zipkin:
+    base-url: http://localhost:7411
+  sleuth:
+    sampler:
+      probability: 1.0
         
 logging:
   level:

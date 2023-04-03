@@ -11,4 +11,8 @@ spring:
       host: mongodb
       port: 27017
       database: product-service
-      
+  zipkin:
+    base-url: http://localhost:7411
+  sleuth:
+    sampler:
+      probability: 1.0

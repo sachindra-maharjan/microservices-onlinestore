@@ -134,7 +134,7 @@ services:
       - zipkin
   
   config-server:
-    container_name: yet-config-server
+    container_name: yeti-config-server
     image: sachindramaharjan/yeti-config-server:latest
     pull_policy: always
     ports:
