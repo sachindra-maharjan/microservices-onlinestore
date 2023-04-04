@@ -2,14 +2,14 @@ all: jib-build run
 
 #Build
 build:
-	mvn clean install
+	mvn -s maven_settings.xml clean install
 
 build-image-only:
-  mvn clean compile jib:dockerBuild
+  mvn -s maven_settings.xml clean compile jib:dockerBuild
 
 #Build image and push to registry
 build-image:
-	mvn clean compile jib:build
+	mvn -s maven_settings.xml clean compile jib:build
 	
 #Run application
 run:
