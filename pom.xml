@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-cloud.version>2022.0.1</spring-cloud.version>
     <micrometer-tracing.version>1.0.3</micrometer-tracing.version>
+    <io.opentelemetry.version>0.14.0</io.opentelemetry.version>
 	</properties>
   
 	<modules>
@@ -53,6 +54,13 @@
             <type>pom</type>
             <scope>import</scope>
           </dependency>
+          <dependency>
+          <groupId>io.opentelemetry</groupId>
+          <artifactId>bom</artifactId>
+          <version>${io.opentelemetry.version}</version>
+          <type>pom</type>
+</dependency>
+
       </dependencies>
     </dependencyManagement>
 
