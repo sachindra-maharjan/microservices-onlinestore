@@ -17,11 +17,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  zipkin:
-    base-url: http://localhost:7411
-  sleuth:
-    sampler:
-      probability: 1.0
+  kafka:
+    bootstrap-servers: broker:9092
+
 
 management:
   health:
