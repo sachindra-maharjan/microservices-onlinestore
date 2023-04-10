@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,6 +14,7 @@ import com.yeti.store.orderservice.dto.OrderDto;
 import com.yeti.store.orderservice.dto.OrderLineItemDto;
 import com.yeti.store.orderservice.exception.ServiceException;
 import com.yeti.store.orderservice.model.Order;
+import com.yeti.store.orderservice.model.Event;
 import com.yeti.store.orderservice.model.OrderLineItem;
 import com.yeti.store.orderservice.repository.OrderRepository;
 import com.yeti.store.orderservice.service.OrderService;
@@ -27,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+    private final KafkaTemplate<String, Event> kafkaTemplate;
 
     @Override
     public String createOrder(OrderDto orderDto) throws ServiceException {
@@ -53,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
             .allMatch(InventoryDto::isInStock);
         if(allProductsInStock) {
             orderRepository.save(order);
+            kafkaTemplate.send("notificationTopic", new Event(UUID.randomUUID().node(), "Order placed."));
         } else {
             throw new ServiceException("Product is not in stock. Please try again later.");
         }
@@ -70,6 +74,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String  resilience4JTestOnly() { 
+        kafkaTemplate.send("notificationTopic", new Event(UUID.randomUUID().node(), "Health check."));
         
         String result = webClientBuilder.build().get()
             .uri("http://inventory-service/inventory/health")

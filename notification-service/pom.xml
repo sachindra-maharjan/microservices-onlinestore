@@ -10,27 +10,18 @@
 	</parent>
 
 	<groupId>com.yeti.store</groupId>
-	<artifactId>order-service</artifactId>
+	<artifactId>notification-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>order-service</name>
-	<description>Order service for online store</description>
+	<name>notification-service</name>
+	<description>Notification service</description>
 
+	<properties>
+		<java.version>17</java.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-    	</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
@@ -45,10 +36,6 @@
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-circuitbreaker-resilience4j</artifactId>
-		</dependency>
-			<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-tracing-bridge-otel</artifactId>
 		</dependency>
@@ -58,18 +45,6 @@
 		</dependency>
 
 		<dependency>
-				<groupId>org.postgresql</groupId>
-				<artifactId>postgresql</artifactId>
-				<scope>runtime</scope>
-      	</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -77,6 +52,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -100,7 +80,7 @@
 								<CONFIG_SERVER_URI>http://config-server</CONFIG_SERVER_URI>
 								<CONFIG_SERVER_PORT>9091</CONFIG_SERVER_PORT>
 								<CONFIG_SERVER_TIMEOUT>300</CONFIG_SERVER_TIMEOUT>
-								<ENTRYPOINT>com.yeti.store.orderservice.OrderServiceApplication</ENTRYPOINT>
+								<ENTRYPOINT>com.yeti.store.notificationservice.NotificationServiceApplication</ENTRYPOINT>
 							</environment>
 							<entrypoint>
 								<shell>/bin/sh</shell>
@@ -130,4 +110,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

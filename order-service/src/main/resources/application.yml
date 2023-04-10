@@ -19,7 +19,16 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: broker:9092
-
+    template:
+      default-topic: notificationTopic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:com.yeti.store.orderservice.model.Event
 
 management:
   health:
