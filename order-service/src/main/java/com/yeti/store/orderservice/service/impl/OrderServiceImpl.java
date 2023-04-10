@@ -2,6 +2,7 @@ package com.yeti.store.orderservice.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,9 +22,11 @@ import com.yeti.store.orderservice.service.OrderService;
 
 // import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 // @Transactional
 public class OrderServiceImpl implements OrderService {
 
@@ -73,8 +76,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String  resilience4JTestOnly() { 
-        kafkaTemplate.send("notificationTopic", new Event(UUID.randomUUID().node(), "Health check."));
+    public String  resilience4JTestOnly() {
+        try{
+            kafkaTemplate.send("notificationTopic", new Event( new Random().nextLong(), "Health check."));
+        } catch(RuntimeException ex) {
+            log.error("Unable to send message to kafka notificationTopic", ex);
+        }
         
         String result = webClientBuilder.build().get()
             .uri("http://inventory-service/inventory/health")

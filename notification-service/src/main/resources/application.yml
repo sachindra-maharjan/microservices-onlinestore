@@ -13,12 +13,16 @@ spring:
     consumer:
       group-id: notificationId
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+     # value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      
       properties:
         spring:
           json:
             type:
               mapping: event:com.yeti.store.notificationservice.Event
+            trusted:
+              packages: "com.yeti.store.orderservice.model.Event"
 
 management:
   endpoints:

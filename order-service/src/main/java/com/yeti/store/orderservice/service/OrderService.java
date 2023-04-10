@@ -1,7 +1,5 @@
 package com.yeti.store.orderservice.service;
 
-import java.util.concurrent.CompletableFuture;
-
 import com.yeti.store.orderservice.dto.OrderDto;
 import com.yeti.store.orderservice.exception.ServiceException;
 
